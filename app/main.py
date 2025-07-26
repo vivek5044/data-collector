@@ -1,16 +1,15 @@
 from flask import Flask, jsonify
-from app.scraper.screener import get_screener_data
+from app.scraper.screener import get_stock_data, get_nifty50_data
 
 def create_app():
     app = Flask(__name__)
 
-    @app.route("/ping")
-    def ping():
-        return "pong", 200
+    @app.route('/api/stock/<symbol>')
+    def fetch_stock(symbol):
+        return jsonify(get_stock_data(symbol))
 
-    @app.route("/screener/<symbol>")
-    def screener_by_symbol(symbol):
-        data = get_screener_data(symbol)
-        return jsonify(data)
+    @app.route('/api/nifty50')
+    def fetch_nifty50():
+        return jsonify(get_nifty50_data())
 
     return app
